@@ -3,10 +3,12 @@ package routes
 import (
 	"codegram/db"
 	"codegram/ent"
+	"codegram/utils"
 	"context"
+	"net/http"
+
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
-	"net/http"
 )
 
 type (
@@ -30,9 +32,22 @@ func (user_rt *UserRoute) LoginUser(c echo.Context) error {
 	}
 
 	if hasUser.Password != payload.Password {
-		return c.JSON(http.StatusBadRequest, NewError("Invalid username or password."))
+		return c.JSON(http.StatusUnauthorized, NewError("Invalid username or password."))
 	}
-	return c.JSON(http.StatusOK, "Login success.")
+
+	user_payload := utils.UserPayload{
+		Id:       hasUser.ID,
+		Username: hasUser.Username,
+		Emai:     hasUser.Email,
+	}
+
+	new_jwttoken, err := utils.CreateJwt(user_payload)
+
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, NewError(err.Error()))
+	}
+
+	return c.JSON(http.StatusOK, NewResponse(true, "Login success.", new_jwttoken))
 }
 
 func (user_rt *UserRoute) GetAllUser(c echo.Context) error {
