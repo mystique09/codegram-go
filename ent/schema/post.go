@@ -23,16 +23,15 @@ func (Post) Fields() []ent.Field {
 		field.String("title").
 			NotEmpty(),
 		field.Text("description").
-			Optional().
-			Nillable(),
+			Optional(),
 		field.String("image").
-			Nillable().
 			Optional().
 			Default("https://<replace-url>.com"),
 		field.Uint32("likes").
 			Default(0),
 		field.Time("created_at").
-			Default(time.Now),
+			Default(time.Now).
+			Immutable(),
 		field.Time("updated_at").
 			Default(time.Now).
 			UpdateDefault(time.Now),

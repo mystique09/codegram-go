@@ -97,20 +97,6 @@ func (pu *PostUpdate) AddLikes(u int32) *PostUpdate {
 	return pu
 }
 
-// SetCreatedAt sets the "created_at" field.
-func (pu *PostUpdate) SetCreatedAt(t time.Time) *PostUpdate {
-	pu.mutation.SetCreatedAt(t)
-	return pu
-}
-
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (pu *PostUpdate) SetNillableCreatedAt(t *time.Time) *PostUpdate {
-	if t != nil {
-		pu.SetCreatedAt(*t)
-	}
-	return pu
-}
-
 // SetUpdatedAt sets the "updated_at" field.
 func (pu *PostUpdate) SetUpdatedAt(t time.Time) *PostUpdate {
 	pu.mutation.SetUpdatedAt(t)
@@ -286,13 +272,6 @@ func (pu *PostUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: post.FieldLikes,
 		})
 	}
-	if value, ok := pu.mutation.CreatedAt(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: post.FieldCreatedAt,
-		})
-	}
 	if value, ok := pu.mutation.UpdatedAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
@@ -418,20 +397,6 @@ func (puo *PostUpdateOne) SetNillableLikes(u *uint32) *PostUpdateOne {
 // AddLikes adds u to the "likes" field.
 func (puo *PostUpdateOne) AddLikes(u int32) *PostUpdateOne {
 	puo.mutation.AddLikes(u)
-	return puo
-}
-
-// SetCreatedAt sets the "created_at" field.
-func (puo *PostUpdateOne) SetCreatedAt(t time.Time) *PostUpdateOne {
-	puo.mutation.SetCreatedAt(t)
-	return puo
-}
-
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (puo *PostUpdateOne) SetNillableCreatedAt(t *time.Time) *PostUpdateOne {
-	if t != nil {
-		puo.SetCreatedAt(*t)
-	}
 	return puo
 }
 
@@ -632,13 +597,6 @@ func (puo *PostUpdateOne) sqlSave(ctx context.Context) (_node *Post, err error) 
 			Type:   field.TypeUint32,
 			Value:  value,
 			Column: post.FieldLikes,
-		})
-	}
-	if value, ok := puo.mutation.CreatedAt(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: post.FieldCreatedAt,
 		})
 	}
 	if value, ok := puo.mutation.UpdatedAt(); ok {

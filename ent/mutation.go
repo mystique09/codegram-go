@@ -208,7 +208,7 @@ func (m *PostMutation) Description() (r string, exists bool) {
 // OldDescription returns the old "description" field's value of the Post entity.
 // If the Post object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PostMutation) OldDescription(ctx context.Context) (v *string, err error) {
+func (m *PostMutation) OldDescription(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
 	}
@@ -257,7 +257,7 @@ func (m *PostMutation) Image() (r string, exists bool) {
 // OldImage returns the old "image" field's value of the Post entity.
 // If the Post object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PostMutation) OldImage(ctx context.Context) (v *string, err error) {
+func (m *PostMutation) OldImage(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldImage is only allowed on UpdateOne operations")
 	}

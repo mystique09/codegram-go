@@ -288,7 +288,7 @@ func (pc *PostCreate) createSpec() (*Post, *sqlgraph.CreateSpec) {
 			Value:  value,
 			Column: post.FieldDescription,
 		})
-		_node.Description = &value
+		_node.Description = value
 	}
 	if value, ok := pc.mutation.Image(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
@@ -296,7 +296,7 @@ func (pc *PostCreate) createSpec() (*Post, *sqlgraph.CreateSpec) {
 			Value:  value,
 			Column: post.FieldImage,
 		})
-		_node.Image = &value
+		_node.Image = value
 	}
 	if value, ok := pc.mutation.Likes(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{

@@ -21,9 +21,9 @@ type Post struct {
 	// Title holds the value of the "title" field.
 	Title string `json:"title,omitempty"`
 	// Description holds the value of the "description" field.
-	Description *string `json:"description,omitempty"`
+	Description string `json:"description,omitempty"`
 	// Image holds the value of the "image" field.
-	Image *string `json:"image,omitempty"`
+	Image string `json:"image,omitempty"`
 	// Likes holds the value of the "likes" field.
 	Likes uint32 `json:"likes,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
@@ -105,15 +105,13 @@ func (po *Post) assignValues(columns []string, values []interface{}) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				po.Description = new(string)
-				*po.Description = value.String
+				po.Description = value.String
 			}
 		case post.FieldImage:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field image", values[i])
 			} else if value.Valid {
-				po.Image = new(string)
-				*po.Image = value.String
+				po.Image = value.String
 			}
 		case post.FieldLikes:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -175,14 +173,10 @@ func (po *Post) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v", po.ID))
 	builder.WriteString(", title=")
 	builder.WriteString(po.Title)
-	if v := po.Description; v != nil {
-		builder.WriteString(", description=")
-		builder.WriteString(*v)
-	}
-	if v := po.Image; v != nil {
-		builder.WriteString(", image=")
-		builder.WriteString(*v)
-	}
+	builder.WriteString(", description=")
+	builder.WriteString(po.Description)
+	builder.WriteString(", image=")
+	builder.WriteString(po.Image)
 	builder.WriteString(", likes=")
 	builder.WriteString(fmt.Sprintf("%v", po.Likes))
 	builder.WriteString(", created_at=")
