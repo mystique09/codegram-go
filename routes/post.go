@@ -42,12 +42,11 @@ func (post_rt *PostRoute) GetPostById(c echo.Context) error {
 
 func (post_rt *PostRoute) CreatePost(c echo.Context) error {
 	auid, uuid_err := uuid.Parse(c.Param("id"))
+	payload := new(db.CPost)
 
 	if uuid_err != nil {
 		return c.JSON(http.StatusBadRequest, NewError(uuid_err.Error()))
 	}
-
-	payload := new(db.CPost)
 
 	if err := (&echo.DefaultBinder{}).BindBody(c, &payload); err != nil {
 		return c.JSON(http.StatusBadRequest, NewError(err.Error()))
@@ -62,9 +61,36 @@ func (post_rt *PostRoute) CreatePost(c echo.Context) error {
 }
 
 func (post_rt *PostRoute) UpdatePost(c echo.Context) error {
+	puid, uuid_err := uuid.Parse(c.Param("id"))
+	payload := new(db.UPost)
 
+	if uuid_err != nil {
+		return c.JSON(http.StatusBadRequest, NewError(uuid_err.Error()))
+	}
+
+	if err := (&echo.DefaultBinder{}).BindBody(c, &payload); err != nil {
+		return c.JSON(http.StatusBadRequest, NewError(err.Error()))
+	}
+
+	p, err := db.UpdatePost(context.Background(), post_rt.Client, puid, *payload)
+
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, NewError(err.Error()))
+	}
+	return c.JSON(http.StatusCreated, NewResponse(true, "Post updated.", p))
 }
 
 func (post_rt *PostRoute) DeletePost(c echo.Context) error {
+	puid, uuid_err := uuid.Parse(c.Param("id"))
 
+	if uuid_err != nil {
+		return c.JSON(http.StatusBadRequest, NewError(uuid_err.Error()))
+	}
+
+	p, err := db.DeletetePost(context.Background(), post_rt.Client, puid)
+
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, NewError(err.Error()))
+	}
+	return c.JSON(http.StatusCreated, NewResponse(true, "Post deleted.", p))
 }
