@@ -13,6 +13,7 @@ func QueryPosts(ctx context.Context, client *ent.Client) ([]*ent.Post, error) {
 	p, err := client.
 		Post.
 		Query().
+		WithAuthor().
 		All(ctx)
 
 	if err != nil {
@@ -26,6 +27,7 @@ func QueryPost(ctx context.Context, client *ent.Client, puid uuid.UUID) (*ent.Po
 		Post.
 		Query().
 		Where(post.ID(puid)).
+		WithAuthor().
 		Only(ctx)
 
 	if err != nil {
