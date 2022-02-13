@@ -33,11 +33,11 @@ func QueryPost(ctx context.Context, client *ent.Client, puid uuid.UUID) (*ent.Po
 	return p, nil
 }
 
-func CreatePost(ctx context.Context, client *ent.Client, auid uuid.UUID, payload CPost) (*ent.Post, error) {
+func CreatePost(ctx context.Context, client *ent.Client, payload CPost) (*ent.Post, error) {
 	p, err := client.
 		Post.
 		Create().
-		SetAuthorID(auid).
+		SetAuthorID(payload.Author).
 		SetTitle(payload.Title).
 		SetDescription(payload.Description).
 		SetImage(payload.Image).
@@ -80,9 +80,10 @@ func DeletetePost(ctx context.Context, client *ent.Client, puid uuid.UUID) (int,
 
 type (
 	CPost struct {
-		Title       string `json:"title"`
-		Description string `json:"description"`
-		Image       string `json:"image"`
+		Author      uuid.UUID `json:"author"`
+		Title       string    `json:"title"`
+		Description string    `json:"description"`
+		Image       string    `json:"image"`
 	}
 
 	UPost struct {
