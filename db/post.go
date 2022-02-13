@@ -4,6 +4,8 @@ import (
 	"codegram/ent"
 	"codegram/ent/post"
 	"context"
+	"time"
+
 	"github.com/google/uuid"
 )
 
@@ -57,6 +59,7 @@ func UpdatePost(ctx context.Context, client *ent.Client, puid uuid.UUID, payload
 		SetTitle(payload.Title).
 		SetDescription(payload.Description).
 		SetImage(payload.Image).
+		SetUpdatedAt(time.Now()).
 		Save(ctx)
 
 	if err != nil {
