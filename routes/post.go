@@ -43,12 +43,12 @@ func (post_rt *PostRoute) GetPostById(c echo.Context) error {
 func (post_rt *PostRoute) CreatePost(c echo.Context) error {
 	payload := new(db.CPost)
 
-	if payload.Author == uuid.Nil || payload.Title == "" {
-		return c.JSON(http.StatusBadRequest, NewError("Missing required fields."))
-	}
-
 	if err := (&echo.DefaultBinder{}).BindBody(c, &payload); err != nil {
 		return c.JSON(http.StatusBadRequest, NewError(err.Error()))
+	}
+
+	if payload.Author == uuid.Nil || payload.Title == "" {
+		return c.JSON(http.StatusBadRequest, NewError("Missing required fields."))
 	}
 
 	p, err := db.CreatePost(context.Background(), post_rt.Client, *payload)
