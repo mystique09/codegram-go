@@ -15,6 +15,9 @@ func QueryUsers(ctx context.Context, client *ent.Client) ([]*ent.User, error) {
 	u, err := client.
 		User.
 		Query().
+		WithPosts().
+		WithFollowers().
+		WithFollowing().Limit(10).
 		All(ctx)
 
 	if err != nil {
@@ -29,6 +32,9 @@ func QueryUser(ctx context.Context, client *ent.Client, id uuid.UUID) (*ent.User
 		User.
 		Query().
 		Where(user.ID(id)).
+		WithPosts().
+		WithFollowers().
+		WithFollowing().
 		Only(ctx)
 
 	if err != nil {
@@ -100,20 +106,6 @@ func DeleteUser(ctx context.Context, client *ent.Client, uid uuid.UUID) (int, er
 	}
 
 	return u, nil
-}
-
-func QueryUserPosts(ctx context.Context,
-	client *ent.Client, auid uuid.UUID) ([]*ent.Post, error) {
-	up, err := client.User.
-		Query().
-		Where(user.ID(auid)).
-		QueryPosts().
-		All(ctx)
-
-	if err != nil {
-		return nil, err
-	}
-	return up, nil
 }
 
 func AddUserFollower(ctx context.Context,
