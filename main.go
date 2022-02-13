@@ -30,6 +30,18 @@ func main() {
 		user_group.DELETE("/:id", user_rt.DeleteUser)
 	}
 
+	post_group := app.Group("/post")
+	{
+		post_rt := routes.PostRoute{
+			Client: client,
+		}
+		post_group.GET("", post_rt.GetAllPost)
+		post_group.GET("/:id", post_rt.GetPostById)
+		post_group.POST("", post_rt.CreatePost)
+		post_group.PUT("/:id", post_rt.UpdatePost)
+		post_group.DELETE("/:id", post_rt.DeletePost)
+	}
+
 	app.Logger.Fatal(app.Start(":3000"))
 }
 
