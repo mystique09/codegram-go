@@ -29,6 +29,7 @@ func main() {
 		user_group.GET("/:id", user_rt.GetUserById)
 		user_group.GET("/posts/:id", user_rt.GetAllUsersPosts)
 		user_group.POST("", user_rt.CreateUser)
+		user_group.POST("/auth", user_rt.LoginUser)
 		user_group.PUT("/:id", user_rt.UpdateUser)
 		user_group.DELETE("/:id", user_rt.DeleteUser)
 	}
