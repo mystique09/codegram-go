@@ -2,13 +2,11 @@ package routes
 
 import (
 	"codegram/db"
-	"context"
-	"net/http"
-
 	"codegram/ent"
-
+	"context"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
+	"net/http"
 )
 
 type (
@@ -16,6 +14,26 @@ type (
 		Client *ent.Client
 	}
 )
+
+func (user_rt *UserRoute) LoginUser(c echo.Context) error {
+	payload := new(db.LUser)
+
+	if err := (&echo.DefaultBinder{}).BindBody(c, &payload); err != nil {
+		return c.JSON(http.StatusBadRequest, NewError(err.Error()))
+	}
+
+	hasUser, err := db.QueryUserByUname(context.Background(),
+		user_rt.Client, *payload)
+
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, NewError(err.Error()))
+	}
+
+	if hasUser.Password != payload.Password {
+		return c.JSON(http.StatusBadRequest, NewError("Invalid username or password."))
+	}
+	return c.JSON(http.StatusOK, "Login success.")
+}
 
 func (user_rt *UserRoute) GetAllUser(c echo.Context) error {
 	res, err := db.QueryUsers(context.Background(),

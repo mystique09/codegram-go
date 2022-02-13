@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"time"
 
 	"codegram/ent"
 	"codegram/ent/user"
@@ -33,6 +34,17 @@ func QueryUser(ctx context.Context, client *ent.Client, id uuid.UUID) (*ent.User
 	if err != nil {
 		return nil, err
 	}
+	return u, nil
+}
+
+func QueryUserByUname(ctx context.Context,
+	client *ent.Client, payload LUser) (*ent.User, error) {
+	u, err := client.User.Query().Where(user.Username(payload.Ussername)).Only(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+
 	return u, nil
 }
 
@@ -70,6 +82,7 @@ func UpdateUserInfo(ctx context.Context,
 		SetUsername(payload.Username).
 		SetPassword(payload.Password).
 		SetEmail(payload.Email).
+		SetUpdatedAt(time.Now()).
 		Save(ctx)
 	if err != nil {
 		return -1, err
@@ -112,6 +125,7 @@ func AddUserFollower(ctx context.Context,
 		Update().
 		Where(user.ID(uid)).
 		AddFollowerIDs(fuids...).
+		SetUpdatedAt(time.Now()).
 		Save(ctx)
 	if err != nil {
 		return -1, err
@@ -127,6 +141,7 @@ func AddUserFollowing(ctx context.Context,
 		Update().
 		Where(user.ID(uid)).
 		AddFollowingIDs(fuid).
+		SetUpdatedAt(time.Now()).
 		Save(ctx)
 	if err != nil {
 		return -1, err
@@ -144,6 +159,7 @@ func RemoveUserFollowing(ctx context.Context,
 		Update().
 		Where(user.ID(uid)).
 		RemoveFollowingIDs(fuid).
+		SetUpdatedAt(time.Now()).
 		Save(ctx)
 
 	if err != nil {
@@ -162,6 +178,7 @@ func UpdateUserRole(ctx context.Context,
 		Update().
 		Where(user.ID(uid)).
 		SetRole(user.Role(new_role)).
+		SetUpdatedAt(time.Now()).
 		Save(ctx)
 
 	if err != nil {
@@ -180,6 +197,7 @@ func UpdateUserStatus(ctx context.Context,
 		Update().
 		Where(user.ID(uid)).
 		SetStatus(user.Status(new_status)).
+		SetUpdatedAt(time.Now()).
 		Save(ctx)
 
 	if err != nil {
@@ -188,14 +206,21 @@ func UpdateUserStatus(ctx context.Context,
 	return u, nil
 }
 
-type CUser struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Email    string `json:"email"`
-}
+type (
+	CUser struct {
+		Username string `json:"username"`
+		Password string `json:"password"`
+		Email    string `json:"email"`
+	}
 
-type UUser struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Email    string `json:"email"`
-}
+	UUser struct {
+		Username string `json:"username"`
+		Password string `json:"password"`
+		Email    string `json:"email"`
+	}
+
+	LUser struct {
+		Ussername string `json:"username"`
+		Password  string `json:"password"`
+	}
+)
