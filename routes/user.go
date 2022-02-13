@@ -57,7 +57,7 @@ func (user_rt *UserRoute) GetUserById(c echo.Context) error {
 	uid, err := uuid.Parse(c.Param("id"))
 
 	if err != nil {
-		c.JSON(http.StatusBadRequest,
+		return c.JSON(http.StatusBadRequest,
 			NewError(err.Error()))
 	}
 
