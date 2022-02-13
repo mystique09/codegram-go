@@ -12,6 +12,7 @@ import (
 )
 
 func Open(db_url string) *ent.Client {
+
 	db, err := sql.Open("pgx", db_url)
 
 	if err != nil {
