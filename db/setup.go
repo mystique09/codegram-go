@@ -5,10 +5,12 @@ import (
 	"context"
 	"database/sql"
 	"log"
+	"os"
 
 	"entgo.io/ent/dialect"
 	entsql "entgo.io/ent/dialect/sql"
 	_ "github.com/jackc/pgx/v4/stdlib"
+	"github.com/joho/godotenv"
 )
 
 func Open(db_url string) *ent.Client {
@@ -23,7 +25,15 @@ func Open(db_url string) *ent.Client {
 }
 
 func SetupDb() *ent.Client {
-	client := Open("postgres://mystique09:mystique09@localhost/codegram")
+	err := godotenv.Load()
+
+	if err != nil {
+		log.Fatal("error loading env file, maybe missing ?")
+	}
+
+	db_url := os.Getenv("DB_URL")
+
+	client := Open(db_url)
 	ctx := context.Background()
 
 	if err := client.Schema.Create(ctx); err != nil {
