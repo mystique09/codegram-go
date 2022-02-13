@@ -42,12 +42,6 @@ func (uu *UserUpdate) SetPassword(s string) *UserUpdate {
 	return uu
 }
 
-// SetHashedPassword sets the "hashed_password" field.
-func (uu *UserUpdate) SetHashedPassword(s string) *UserUpdate {
-	uu.mutation.SetHashedPassword(s)
-	return uu
-}
-
 // SetEmail sets the "email" field.
 func (uu *UserUpdate) SetEmail(s string) *UserUpdate {
 	uu.mutation.SetEmail(s)
@@ -296,11 +290,6 @@ func (uu *UserUpdate) check() error {
 			return &ValidationError{Name: "password", err: fmt.Errorf(`ent: validator failed for field "User.password": %w`, err)}
 		}
 	}
-	if v, ok := uu.mutation.HashedPassword(); ok {
-		if err := user.HashedPasswordValidator(v); err != nil {
-			return &ValidationError{Name: "hashed_password", err: fmt.Errorf(`ent: validator failed for field "User.hashed_password": %w`, err)}
-		}
-	}
 	if v, ok := uu.mutation.Email(); ok {
 		if err := user.EmailValidator(v); err != nil {
 			return &ValidationError{Name: "email", err: fmt.Errorf(`ent: validator failed for field "User.email": %w`, err)}
@@ -349,13 +338,6 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Type:   field.TypeString,
 			Value:  value,
 			Column: user.FieldPassword,
-		})
-	}
-	if value, ok := uu.mutation.HashedPassword(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldHashedPassword,
 		})
 	}
 	if value, ok := uu.mutation.Email(); ok {
@@ -583,12 +565,6 @@ func (uuo *UserUpdateOne) SetUsername(s string) *UserUpdateOne {
 // SetPassword sets the "password" field.
 func (uuo *UserUpdateOne) SetPassword(s string) *UserUpdateOne {
 	uuo.mutation.SetPassword(s)
-	return uuo
-}
-
-// SetHashedPassword sets the "hashed_password" field.
-func (uuo *UserUpdateOne) SetHashedPassword(s string) *UserUpdateOne {
-	uuo.mutation.SetHashedPassword(s)
 	return uuo
 }
 
@@ -847,11 +823,6 @@ func (uuo *UserUpdateOne) check() error {
 			return &ValidationError{Name: "password", err: fmt.Errorf(`ent: validator failed for field "User.password": %w`, err)}
 		}
 	}
-	if v, ok := uuo.mutation.HashedPassword(); ok {
-		if err := user.HashedPasswordValidator(v); err != nil {
-			return &ValidationError{Name: "hashed_password", err: fmt.Errorf(`ent: validator failed for field "User.hashed_password": %w`, err)}
-		}
-	}
 	if v, ok := uuo.mutation.Email(); ok {
 		if err := user.EmailValidator(v); err != nil {
 			return &ValidationError{Name: "email", err: fmt.Errorf(`ent: validator failed for field "User.email": %w`, err)}
@@ -917,13 +888,6 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			Type:   field.TypeString,
 			Value:  value,
 			Column: user.FieldPassword,
-		})
-	}
-	if value, ok := uuo.mutation.HashedPassword(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldHashedPassword,
 		})
 	}
 	if value, ok := uuo.mutation.Email(); ok {

@@ -60,8 +60,7 @@ func CreateUser(ctx context.Context,
 		User.
 		Create().
 		SetUsername(payload.Username).
-		SetPassword(payload.Password).
-		SetHashedPassword(string(hashed_pass)).
+		SetPassword(string(hashed_pass)).
 		SetEmail(payload.Email).
 		Save(ctx)
 

@@ -9,6 +9,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type (
@@ -31,8 +32,10 @@ func (user_rt *UserRoute) LoginUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, NewError(err.Error()))
 	}
 
-	if hasUser.Password != payload.Password {
-		return c.JSON(http.StatusUnauthorized, NewError("Invalid username or password."))
+	err = bcrypt.CompareHashAndPassword([]byte(hasUser.Password), []byte(payload.Password))
+
+	if err != nil {
+		return c.JSON(http.StatusUnauthorized, NewError(err.Error()))
 	}
 
 	user_payload := utils.UserPayload{

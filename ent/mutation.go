@@ -771,7 +771,6 @@ type UserMutation struct {
 	id               *uuid.UUID
 	username         *string
 	password         *string
-	hashed_password  *string
 	email            *string
 	role             *user.Role
 	status           *user.Status
@@ -966,42 +965,6 @@ func (m *UserMutation) OldPassword(ctx context.Context) (v string, err error) {
 // ResetPassword resets all changes to the "password" field.
 func (m *UserMutation) ResetPassword() {
 	m.password = nil
-}
-
-// SetHashedPassword sets the "hashed_password" field.
-func (m *UserMutation) SetHashedPassword(s string) {
-	m.hashed_password = &s
-}
-
-// HashedPassword returns the value of the "hashed_password" field in the mutation.
-func (m *UserMutation) HashedPassword() (r string, exists bool) {
-	v := m.hashed_password
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldHashedPassword returns the old "hashed_password" field's value of the User entity.
-// If the User object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldHashedPassword(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldHashedPassword is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldHashedPassword requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldHashedPassword: %w", err)
-	}
-	return oldValue.HashedPassword, nil
-}
-
-// ResetHashedPassword resets all changes to the "hashed_password" field.
-func (m *UserMutation) ResetHashedPassword() {
-	m.hashed_password = nil
 }
 
 // SetEmail sets the "email" field.
@@ -1365,15 +1328,12 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 7)
 	if m.username != nil {
 		fields = append(fields, user.FieldUsername)
 	}
 	if m.password != nil {
 		fields = append(fields, user.FieldPassword)
-	}
-	if m.hashed_password != nil {
-		fields = append(fields, user.FieldHashedPassword)
 	}
 	if m.email != nil {
 		fields = append(fields, user.FieldEmail)
@@ -1402,8 +1362,6 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.Username()
 	case user.FieldPassword:
 		return m.Password()
-	case user.FieldHashedPassword:
-		return m.HashedPassword()
 	case user.FieldEmail:
 		return m.Email()
 	case user.FieldRole:
@@ -1427,8 +1385,6 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldUsername(ctx)
 	case user.FieldPassword:
 		return m.OldPassword(ctx)
-	case user.FieldHashedPassword:
-		return m.OldHashedPassword(ctx)
 	case user.FieldEmail:
 		return m.OldEmail(ctx)
 	case user.FieldRole:
@@ -1461,13 +1417,6 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetPassword(v)
-		return nil
-	case user.FieldHashedPassword:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetHashedPassword(v)
 		return nil
 	case user.FieldEmail:
 		v, ok := value.(string)
@@ -1558,9 +1507,6 @@ func (m *UserMutation) ResetField(name string) error {
 		return nil
 	case user.FieldPassword:
 		m.ResetPassword()
-		return nil
-	case user.FieldHashedPassword:
-		m.ResetHashedPassword()
 		return nil
 	case user.FieldEmail:
 		m.ResetEmail()

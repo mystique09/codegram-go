@@ -18,8 +18,6 @@ const (
 	FieldUsername = "username"
 	// FieldPassword holds the string denoting the password field in the database.
 	FieldPassword = "password"
-	// FieldHashedPassword holds the string denoting the hashed_password field in the database.
-	FieldHashedPassword = "hashed_password"
 	// FieldEmail holds the string denoting the email field in the database.
 	FieldEmail = "email"
 	// FieldRole holds the string denoting the role field in the database.
@@ -56,7 +54,6 @@ var Columns = []string{
 	FieldID,
 	FieldUsername,
 	FieldPassword,
-	FieldHashedPassword,
 	FieldEmail,
 	FieldRole,
 	FieldStatus,
@@ -88,8 +85,6 @@ var (
 	UsernameValidator func(string) error
 	// PasswordValidator is a validator for the "password" field. It is called by the builders before save.
 	PasswordValidator func(string) error
-	// HashedPasswordValidator is a validator for the "hashed_password" field. It is called by the builders before save.
-	HashedPasswordValidator func(string) error
 	// EmailValidator is a validator for the "email" field. It is called by the builders before save.
 	EmailValidator func(string) error
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.

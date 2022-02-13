@@ -26,11 +26,7 @@ func (User) Fields() []ent.Field {
 		field.String("password").
 			NotEmpty().
 			MinLen(8).
-			MaxLen(12).
 			Sensitive(),
-		field.String("hashed_password").
-			NotEmpty().
-			Unique(),
 		field.String("email").
 			NotEmpty().
 			Unique(),

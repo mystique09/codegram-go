@@ -37,8 +37,7 @@ var (
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
 		{Name: "username", Type: field.TypeString, Unique: true},
-		{Name: "password", Type: field.TypeString, Size: 12},
-		{Name: "hashed_password", Type: field.TypeString, Unique: true},
+		{Name: "password", Type: field.TypeString},
 		{Name: "email", Type: field.TypeString, Unique: true},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"Normal", "Admin"}, Default: "Normal"},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"offline", "online"}, Default: "offline"},
