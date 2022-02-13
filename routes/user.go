@@ -3,7 +3,6 @@ package routes
 import (
 	"codegram/db"
 	"context"
-	"fmt"
 	"net/http"
 
 	"codegram/ent"
@@ -24,9 +23,9 @@ func (user_rt *UserRoute) GetAllUser(c echo.Context) error {
 
 	if err != nil {
 		return c.JSON(http.StatusBadRequest,
-			&Error{Message: err.Error()})
+			NewError(err.Error()))
 	}
-	return c.JSON(http.StatusOK, res)
+	return c.JSON(http.StatusOK, NewResponse(true, "Successfully queried all users.", res))
 }
 
 func (user_rt *UserRoute) CreateUser(c echo.Context) error {
@@ -51,7 +50,7 @@ func (user_rt *UserRoute) CreateUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest,
 			NewError(err.Error()))
 	}
-	return c.JSON(http.StatusCreated, res)
+	return c.JSON(http.StatusCreated, NewResponse(true, "Successfully created one user.", res))
 }
 
 func (user_rt *UserRoute) GetUserById(c echo.Context) error {
@@ -68,7 +67,7 @@ func (user_rt *UserRoute) GetUserById(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest,
 			NewError(err.Error()))
 	}
-	return c.JSON(http.StatusOK, res)
+	return c.JSON(http.StatusOK, NewResponse(true, "Successfully queried one user.", res))
 }
 
 func (user_rt *UserRoute) UpdateUser(c echo.Context) error {
@@ -91,8 +90,7 @@ func (user_rt *UserRoute) UpdateUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest,
 			NewError(err.Error()))
 	}
-	return c.JSON(http.StatusOK,
-		fmt.Sprintf("User updated: %v", res))
+	return c.JSON(http.StatusOK, NewResponse(true, "Successfully updated one user.", res))
 }
 
 func (user_rt *UserRoute) DeleteUser(c echo.Context) error {
@@ -109,5 +107,5 @@ func (user_rt *UserRoute) DeleteUser(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, NewError(err.Error()))
 	}
-	return c.JSON(http.StatusOK, fmt.Sprintf("User deleted: %v", res))
+	return c.JSON(http.StatusOK, NewResponse(true, "Successfully deleted one user.", res))
 }
