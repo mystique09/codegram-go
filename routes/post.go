@@ -57,7 +57,7 @@ func (post_rt *PostRoute) CreatePost(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, NewError(err.Error()))
 	}
-	return c.JSON(http.StatusCreated, NewResponse(true, "New post created.", p))
+	return c.JSON(http.StatusCreated, NewResponse(true, "Successfully created one post.", p))
 }
 
 func (post_rt *PostRoute) UpdatePost(c echo.Context) error {
@@ -77,7 +77,7 @@ func (post_rt *PostRoute) UpdatePost(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, NewError(err.Error()))
 	}
-	return c.JSON(http.StatusCreated, NewResponse(true, "Post updated.", p))
+	return c.JSON(http.StatusCreated, NewResponse(true, "Successfully updated one post.", p))
 }
 
 func (post_rt *PostRoute) DeletePost(c echo.Context) error {
@@ -92,5 +92,5 @@ func (post_rt *PostRoute) DeletePost(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, NewError(err.Error()))
 	}
-	return c.JSON(http.StatusCreated, NewResponse(true, "Post deleted.", p))
+	return c.JSON(http.StatusCreated, NewResponse(true, "Successfully deleted one post.", p))
 }
