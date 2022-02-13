@@ -38,7 +38,6 @@ func main() {
 	// Private users routes.
 	priv_user_group := jwt_group.Group("/users")
 	{
-		priv_user_group.GET("/:id/posts", user_rt.GetAllUsersPosts)
 		priv_user_group.PUT("/:id", user_rt.UpdateUser)
 		priv_user_group.DELETE("/:id", user_rt.DeleteUser)
 	}

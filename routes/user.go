@@ -106,21 +106,6 @@ func (user_rt *UserRoute) GetUserById(c echo.Context) error {
 	return c.JSON(http.StatusOK, NewResponse(true, "Successfully queried one user.", res))
 }
 
-func (user_rt *UserRoute) GetAllUsersPosts(c echo.Context) error {
-	auid, err := uuid.Parse(c.Param("id"))
-
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, NewError(err.Error()))
-	}
-
-	p, err := db.QueryUserPosts(context.Background(), user_rt.Client, auid)
-
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, NewError(err.Error()))
-	}
-	return c.JSON(http.StatusOK, NewResponse(true, "Successfully queried all users post.", p))
-}
-
 func (user_rt *UserRoute) UpdateUser(c echo.Context) error {
 	payload := new(db.UUser)
 	uid, uuid_err := uuid.Parse(c.Param("id"))
