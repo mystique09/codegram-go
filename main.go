@@ -13,7 +13,9 @@ func main() {
 	client := db.SetupDb()
 
 	app := echo.New()
-	app.Use(middleware.Logger())
+	app.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+		Format: `[${time_rfc3339}] ${status} ${method} ${host}${path} ${latency_human}` + "\n",
+	}))
 	app.Use(middleware.Recover())
 
 	app.GET("/", homeRoute)
