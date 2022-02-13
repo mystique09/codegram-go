@@ -18,7 +18,7 @@ func main() {
 
 	app.GET("/", homeRoute)
 
-	user_group := app.Group("/user")
+	user_group := app.Group("/users")
 	{
 		user_rt := routes.UserRoute{
 			Client: client,
@@ -30,7 +30,7 @@ func main() {
 		user_group.DELETE("/:id", user_rt.DeleteUser)
 	}
 
-	post_group := app.Group("/post")
+	post_group := app.Group("/posts")
 	{
 		post_rt := routes.PostRoute{
 			Client: client,
