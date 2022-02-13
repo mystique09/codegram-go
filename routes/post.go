@@ -44,7 +44,7 @@ func (post_rt *PostRoute) CreatePost(c echo.Context) error {
 	payload := new(db.CPost)
 
 	if payload.Author == uuid.Nil || payload.Title == "" {
-		return c.JSON(http.StatusBadRequest, NewError("Missing author field."))
+		return c.JSON(http.StatusBadRequest, NewError("Missing required fields."))
 	}
 
 	if err := (&echo.DefaultBinder{}).BindBody(c, &payload); err != nil {
