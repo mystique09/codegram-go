@@ -4,7 +4,6 @@ import (
 	"codegram/ent"
 	"codegram/ent/post"
 	"context"
-
 	"github.com/google/uuid"
 )
 
@@ -46,6 +45,7 @@ func CreatePost(ctx context.Context, client *ent.Client, payload CPost) (*ent.Po
 	if err != nil {
 		return nil, err
 	}
+
 	return p, nil
 }
 

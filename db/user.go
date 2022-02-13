@@ -11,7 +11,11 @@ import (
 )
 
 func QueryUsers(ctx context.Context, client *ent.Client) ([]*ent.User, error) {
-	u, err := client.User.Query().All(ctx)
+	u, err := client.
+		User.
+		Query().
+		All(ctx)
+
 	if err != nil {
 		return nil, err
 	}
@@ -20,7 +24,12 @@ func QueryUsers(ctx context.Context, client *ent.Client) ([]*ent.User, error) {
 }
 
 func QueryUser(ctx context.Context, client *ent.Client, id uuid.UUID) (*ent.User, error) {
-	u, err := client.User.Query().Where(user.ID(id)).Only(ctx)
+	u, err := client.
+		User.
+		Query().
+		Where(user.ID(id)).
+		Only(ctx)
+
 	if err != nil {
 		return nil, err
 	}
@@ -79,6 +88,20 @@ func DeleteUser(ctx context.Context, client *ent.Client, uid uuid.UUID) (int, er
 	}
 
 	return u, nil
+}
+
+func QueryUserPosts(ctx context.Context,
+	client *ent.Client, auid uuid.UUID) ([]*ent.Post, error) {
+	up, err := client.User.
+		Query().
+		Where(user.ID(auid)).
+		QueryPosts().
+		All(ctx)
+
+	if err != nil {
+		return nil, err
+	}
+	return up, nil
 }
 
 func AddUserFollower(ctx context.Context,
